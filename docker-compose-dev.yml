@@ -1,19 +1,19 @@
 version: "3.8"
 
 services:
-  mysql_waploaded_crypto_academy:
+  mysql_project:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     #    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: prince
-      MYSQL_DATABASE: mysql_waploaded_crypto_academy_db
-      MYSQL_USER: u-wg04zCvrxhd3coiv1
-      MYSQL_PASSWORD: wg04zCvrxhd3coiv1
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE:
+      MYSQL_USER: u-wg04z
+      MYSQL_PASSWORD: wg04zC
     volumes:
-      - mysql_waploaded_crypto_academy:/var/lib/mysql
+      - mysql_project:/var/lib/mysql
     ports:
       - 3306:3306
 
 volumes:
-  mysql_waploaded_crypto_academy:
+  mysql_project:
