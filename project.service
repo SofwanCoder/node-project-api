@@ -1,0 +1,11 @@
+[Unit]
+Description=Project api service
+
+[Service]
+Type=simple
+Restart=always
+WorkingDirectory=/var/www/public_html
+ExecStart=/usr/bin/npm run start
+
+[Install]
+WantedBy=multi-user.target

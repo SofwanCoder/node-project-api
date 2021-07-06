@@ -1,0 +1,45 @@
+name: ProductionBuild
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Remove sample.env
+        run: rm sample.env
+
+      - name: 📂 Upload FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_FTP_USER }}
+          password: ${{ secrets.HOST_FTP_PASSWORD }}
+          server-dir: './api.project.com/public/'
+
+      - name: Installing Script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /var/www/api.project.com/public
+            cp /var/www/api.project.com/.env ./.env
+            npm install
+            npm run build
+            systemctl daemon-reload
+            service project restart
