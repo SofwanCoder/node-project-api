@@ -3,7 +3,7 @@ name: ProductionBuild
 on:
   push:
     branches:
-      - main
+      - none
 
   workflow_dispatch:
 
