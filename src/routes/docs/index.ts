@@ -2,11 +2,11 @@ import express, { Router } from "express";
 import swaggerUi from "swagger-ui-express";
 const router = express.Router();
 
-import docs from "../../docs";
+const docs = require("../../../swagger.json");
 
-router.use("/view", swaggerUi.serve, swaggerUi.setup(docs));
+router.use("/", swaggerUi.serve, swaggerUi.setup(docs));
 
-router.get("/raw", (req, res) => {
+router.get("/json", (req, res) => {
   return res.send(docs);
 });
 

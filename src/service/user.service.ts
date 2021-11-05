@@ -5,15 +5,15 @@ import { StatusCodes } from "http-status-codes";
 import { jwtHelper } from "../helpers/jwt.helper";
 import { User, UserCreationAttributes } from "../models/User";
 import {
-  generateMessage,
   generateErrorMessage,
+  generateMessage,
 } from "../shared/utils/responseManager";
 import { Profile } from "../models/Profile";
 import NotFoundException from "../shared/exceptions/http/NotFoundException";
 import ConflictException from "../shared/exceptions/http/ConflictException";
+import InternalServerException from "../shared/exceptions/http/InternalServerException";
 
 class UserService {
-
   public static async createNewUser(requestBody: any) {
     const { email, name, phone, password } = requestBody;
 
@@ -29,10 +29,7 @@ class UserService {
     });
 
     if (existingUser) {
-      return generateErrorMessage(
-        "User email/username already exists",
-        StatusCodes.BAD_REQUEST
-      );
+      throw new ConflictException("User with email/username already exist");
     }
 
     if (!username) {
@@ -48,7 +45,7 @@ class UserService {
       Profile: {
         name,
         phone: phone || "",
-      }
+      },
     };
     const user = await User.create(newUser, {
       include: [
@@ -60,16 +57,10 @@ class UserService {
 
     const userToken = jwtHelper.generateUserToken(user.id, 0);
 
-    const data = {
+    return {
       token: userToken,
       user,
-    }
-
-    return generateMessage(
-      "Created user successfully",
-      StatusCodes.CREATED,
-      data
-    );
+    };
   }
 
   public static async loginUser(requestBody: any) {
@@ -106,18 +97,16 @@ class UserService {
         existingUser.clearance
       );
     } catch (e) {
-      return generateErrorMessage(
-        "Unable to complete login",
-        StatusCodes.INTERNAL_SERVER_ERROR
+      throw new InternalServerException(
+        "Error generating user token, please try again"
       );
     }
-    const data = {
+
+    return {
       token: userToken,
       user: existingUser,
     };
-    return generateMessage("User logged in successfully", StatusCodes.OK, data);
   }
-
 }
 
 export default UserService;

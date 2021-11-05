@@ -21,7 +21,6 @@ export interface ProfileAttributes {
   user_id: number;
   name: string;
   phone?: string;
-  is_phone_verified?: boolean;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -78,7 +77,7 @@ export class Profile extends Model<
   })
   public User!: User;
 
-  public toJSON(): Record<string, any> {
+  public toJSON() {
     const { id, user_id, name, phone, created_at, updated_at, User } = this;
     return {
       id,

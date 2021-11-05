@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { sendResponse } from "../shared/utils/responseManager";
 
-import WebService from "../service/web.service";
+import UserController from "../controllers/user.controller";
 
-class WebController {
+class UserHandler {
   public static async handleSubscribe(
     this: void,
     req: Request,
@@ -11,7 +11,7 @@ class WebController {
     next: NextFunction
   ) {
     try {
-      const response = await WebService.subscribeEmail(req.body.email);
+      const response = await UserController.createUserController(req.body);
       return sendResponse(res, response);
     } catch (error) {
       next(error);
@@ -25,7 +25,7 @@ class WebController {
     next: NextFunction
   ) {
     try {
-      const response = await WebService.contactUs(req.body);
+      const response = await UserController.loginUserController(req.body);
       return sendResponse(res, response);
     } catch (error) {
       next(error);
@@ -33,4 +33,4 @@ class WebController {
   }
 }
 
-export default WebController;
+export default UserHandler;

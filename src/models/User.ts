@@ -34,6 +34,18 @@ export interface UserCreationAttributes
   Profile: Omit<ProfileCreationAttributes, "user_id">;
 }
 
+export interface UserDto {
+  id: number;
+  name: string;
+  clearance: number;
+  email: string;
+  username: string;
+  is_verified: boolean;
+  created_at: Date;
+  updated_at: Date;
+  Profile?: Profile;
+}
+
 @Table({ tableName: "user" })
 export class User extends Model<UserAttributes, UserCreationAttributes> {
   @AutoIncrement
@@ -94,7 +106,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> {
 
   public getProfile!: Sequelize.BelongsToGetAssociationMixin<Profile>;
 
-  public toJSON(): Record<string, any> {
+  public toJSON() {
     const {
       id,
       clearance,

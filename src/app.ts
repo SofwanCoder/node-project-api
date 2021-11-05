@@ -17,24 +17,6 @@ export const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan("dev"));
-
-app.use(
-  bodyParser.json({
-    /**
-     * This piece of code is important because webhook from coinbase needs
-     * the raw-body of the request to compute the integrity of the request.
-     * The check ensures that only request to the url saves the rawBody, so
-     * as to avoid excess ram consumption on every request*/
-    verify(req: IncomingMessage, res: ServerResponse, buf: Buffer) {
-      if (req.headers["x-cc-webhook-signature"]) {
-        (req as any).rawBody = buf;
-      }
-      // if (req.url?.includes("webhook/cb-events")) {
-      //   (req as any).rawBody = buf;
-      // }
-    },
-  })
-);
 app.use(cookieParser());
 
 app.use(

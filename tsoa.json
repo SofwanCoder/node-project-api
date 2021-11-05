@@ -1,0 +1,81 @@
+{
+  "entryFile": "src/app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "spec": {
+    "version": "1.0.1",
+    "outputDirectory": ".",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "security": [
+      {
+        "Bearer": []
+      }
+    ],
+    "tags": [
+      {
+        "name": "User",
+        "description": "User operations"
+      },
+      {
+        "name": "Auth",
+        "description": "Authentication operations"
+      }
+    ],
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "spec": {
+      "info": {
+        "title": "Project Title",
+        "description": "Project Description",
+        "termsOfService": "https://terms.webite.com",
+        "contact": {
+          "name": "Person Name",
+          "url": "https://url.com",
+          "email": "email@person.com"
+        }
+      },
+      "servers": [
+        {
+          "url": "{protocol}://{host}:{port}{basePath}",
+          "variables": {
+            "port": {
+              "default": "5005",
+              "enum": [
+                "5005"
+              ]
+            },
+            "host": {
+              "default": "localhost",
+              "enum": [
+                "localhost"
+              ]
+            },
+            "protocol": {
+              "default": "http",
+              "enum": [
+                "http",
+                "https"
+              ]
+            },
+            "basePath": {
+              "default": "/",
+              "enum": [
+                "/",
+                "/v1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "specMerging": "recursive"
+  }
+}

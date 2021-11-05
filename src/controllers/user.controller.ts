@@ -1,38 +1,22 @@
-import { NextFunction, Request, Response } from "express";
-import { sendResponse } from "../shared/utils/responseManager";
+import { Route, Post, Body, SuccessResponse, Tags } from "tsoa";
 
 import UserService from "../service/user.service";
+import { CreateUserPayload, LoginUserPayload } from "../@types/user.types";
 
+@Route("/users")
+@Tags("User")
 class UserController {
-
-  public static async handleCreateUser(
-    this: void,
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
-      const response = await UserService.createNewUser(req.body);
-      return sendResponse(res, response);
-    } catch (error) {
-      next(error);
-    }
+  @SuccessResponse("201", "Bad Request")
+  @Post()
+  public static async createUserController(@Body() body: CreateUserPayload) {
+    return await UserService.createNewUser(body);
   }
 
-  public static async handleLoginUser(
-    this: void,
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
-      const response = await UserService.loginUser(req.body);
-      return sendResponse(res, response);
-    } catch (error) {
-      next(error);
-    }
+  @SuccessResponse("201", "Bad Request")
+  @Post("/login")
+  public static async loginUserController(@Body() body: LoginUserPayload) {
+    return await UserService.loginUser(body);
   }
-
 }
 
 export default UserController;
