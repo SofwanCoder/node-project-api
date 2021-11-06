@@ -1,17 +1,11 @@
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import { Op } from "sequelize";
-import { StatusCodes } from "http-status-codes";
-import { jwtHelper } from "../helpers/jwt.helper";
 import { User, UserCreationAttributes } from "../models/User";
-import {
-  generateErrorMessage,
-  generateMessage,
-} from "../shared/utils/responseManager";
 import { Profile } from "../models/Profile";
-import NotFoundException from "../shared/exceptions/http/NotFoundException";
-import ConflictException from "../shared/exceptions/http/ConflictException";
-import InternalServerException from "../shared/exceptions/http/InternalServerException";
+import ConflictException from "../exceptions/http/ConflictException";
+import NotFoundException from "../exceptions/http/NotFoundException";
+import { generateAuthorization } from "../helpers/user.helper";
 
 class UserService {
   public static async createNewUser(requestBody: any) {
@@ -55,12 +49,9 @@ class UserService {
       ],
     });
 
-    const userToken = jwtHelper.generateUserToken(user.id, 0);
+    const [auth_token, refresh_token] = await generateAuthorization(user);
 
-    return {
-      token: userToken,
-      user,
-    };
+    return { auth_token, refresh_token, user };
   }
 
   public static async loginUser(requestBody: any) {
@@ -70,42 +61,29 @@ class UserService {
       email,
     };
 
-    const existingUser = await User.findOne({
+    const user = await User.findOne({
       where,
       include: Profile,
     });
 
-    if (!existingUser) {
+    if (!user) {
       throw new NotFoundException("Invalid Account");
     }
 
-    const passwordCorrect = bcrypt.compareSync(password, existingUser.password);
+    const passwordCorrect = bcrypt.compareSync(password, user.password);
     if (!passwordCorrect) {
       throw new ConflictException("Invalid credentials");
     }
 
-    if (!existingUser.is_verified) {
+    if (!user.is_verified) {
       throw new NotFoundException(
         "Your account is Unverified, kindly login to your email and click the verify link"
       );
     }
 
-    let userToken;
-    try {
-      userToken = jwtHelper.generateUserToken(
-        existingUser.id,
-        existingUser.clearance
-      );
-    } catch (e) {
-      throw new InternalServerException(
-        "Error generating user token, please try again"
-      );
-    }
+    const [auth_token, refresh_token] = await generateAuthorization(user);
 
-    return {
-      token: userToken,
-      user: existingUser,
-    };
+    return { auth_token, refresh_token, user };
   }
 }
 

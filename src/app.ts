@@ -6,12 +6,10 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Request, Response } from "express";
 import helmet from "helmet";
-// eslint-disable-next-line import/order
-import { IncomingMessage, ServerResponse } from "http";
 import methodOverride from "method-override";
 import morgan from "morgan";
 import { routerBase } from "./routes";
-import errorMiddleware from "./shared/middlewares/errorHandler";
+import errorMiddleware from "./middlewares/errorHandler";
 
 export const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));

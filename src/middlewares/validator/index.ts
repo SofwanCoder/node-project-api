@@ -1,11 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
+import { respond } from "../../utils/response";
 
-export * from "./user.validations";
-export * from "./web.validations";
-
-export function validate() {
+export function validateRules() {
   return (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -13,14 +11,15 @@ export function validate() {
       errors.array().forEach((val) => {
         outputErrors[val.param] = val.msg;
       });
-      res.status(StatusCodes.BAD_REQUEST).json({
-        ie: outputErrors,
-        message: "Invalid incomplete/input",
+      const message = "Invalid incomplete/input";
+      return respond(res, {
+        message,
+        errors: outputErrors,
+        code: StatusCodes.EXPECTATION_FAILED,
       });
-      return;
     }
     return next();
   };
 }
 
-export default validate;
+export default validateRules;

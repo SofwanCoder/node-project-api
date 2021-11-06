@@ -13,6 +13,7 @@ void (async () => {
   // });
   await seed();
   // await sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
+  await import("./cronjobs");
   createServer(app).listen(port, () =>
     console.info(`Server running on port ${port}`)
   );

@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && tsc",
+    "compile": "tsc",
+    "build": "npm run clean && npm run doc  && npm run compile",
     "start": "node dist/index.js",
     "dev": "nodemon -x ts-node src/index.ts",
     "build:dev": "tsc --watch --preserveWatchOutput",
@@ -101,6 +102,7 @@
     "@types/morgan": "^1.9.2",
     "@types/multer": "^1.4.6",
     "@types/node": "^14.17.2",
+    "@types/node-cron": "^3.0.0",
     "@types/nodemailer": "^6.4.2",
     "@types/sequelize": "^4.28.9",
     "@types/supertest": "^2.0.11",

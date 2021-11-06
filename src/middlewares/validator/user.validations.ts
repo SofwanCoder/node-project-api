@@ -1,11 +1,12 @@
 import { body } from "express-validator";
-import { User } from "../../../models/User";
+import { User } from "../../models/User";
 
 export function createUserRules() {
   return [
     body("email")
-      .isEmail()
+      .isString()
       .trim()
+      .isEmail()
       .toLowerCase()
       .custom(async (email) => {
         const exist = await User.findOne({
@@ -22,10 +23,6 @@ export function createUserRules() {
       .isString()
       .trim()
       .toLowerCase()
-      .isLength({ min: 4 })
-      .withMessage("Minimum of 4 Characters")
-      .matches(/^[\d\w_]+$/)
-      .withMessage("Invalid characters in Username")
       .custom(async (username) => {
         const exist = await User.findOne({
           where: {
@@ -37,26 +34,24 @@ export function createUserRules() {
 
         return true;
       }),
-    body("name").isString().isLength({ min: 2 }),
+    body("dob").isDate(),
+    body("first_name").isString(),
+    body("last_name").isString(),
+    body("country").isString(),
+    body("address").isString(),
+    body("state").isString(),
+    body("phone_number").isString(),
+    body("gender").isIn(["Male", "Female"]),
     body("password").isString().isLength({ min: 6 }),
-    body("password_confirm").isString().isLength({ min: 6 }),
-    body("referral").isString().isLength({ min: 2 }).optional({
-      nullable: true,
-    }),
-    body("phone")
-      .isString()
-      .matches(/^\+\d+$/)
-      .withMessage("Invalid Phone number")
-      .isLength({ min: 10 }),
-  ];
-}
-
-export function loginUserRules() {
-  return [
-    body("email").isEmail(),
-    body("password")
+    body("password_confirm")
       .isString()
       .isLength({ min: 6 })
-      .withMessage("Minimum password length is 6"),
+      .custom((input, meta) => {
+        const password = meta.req.body.password;
+        if (input !== password) {
+          throw new Error("Does not match password");
+        }
+        return true;
+      }),
   ];
 }

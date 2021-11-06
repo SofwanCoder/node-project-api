@@ -1,8 +1,8 @@
 import crypto from "crypto";
 import moment from "moment";
 
-export function generateReference() {
+export function generateReference(base = "trf") {
   return moment().format(
-    `[trx_${crypto.randomBytes(6).toString("hex")}_]YYYYMMDDkkmmss`
+    `[${base}_${crypto.randomBytes(6).toString("hex")}_]YYYYMMDDkkmmss`
   );
 }

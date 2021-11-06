@@ -1,20 +1,22 @@
 import express, { Router } from "express";
-import UserHandler from "../../handlers/user.handler";
-import * as validator from "../../shared/middlewares/validator";
+import UserHandler from "../../handlers/UserHandler";
+import { loginUserRules } from "../../middlewares/validator/auth.validations";
+import validateRules from "../../middlewares/validator";
+import { createUserRules } from "../../middlewares/validator/user.validations";
 
 const router = express.Router();
 
 router.post(
   "/sign-in",
-  validator.loginUserRules(),
-  validator.validate(),
+  loginUserRules(),
+  validateRules(),
   UserHandler.handleLoginUser
 );
 
 router.post(
   "/",
-  validator.createUserRules(),
-  validator.validate(),
+  createUserRules(),
+  validateRules(),
   UserHandler.handleCreateUser
 );
 

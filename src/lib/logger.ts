@@ -22,17 +22,4 @@ const logger = winston.createLogger({
   ),
 });
 
-export default {
-  info: (msg: string, data: any = null) =>
-    logger.info(
-      `${msg} ${
-        data ? (typeof data === "string" ? data : JSON.stringify(data)) : ""
-      }`
-    ),
-  error: (msg: string, err: any = null) =>
-    logger.error(
-      `${msg} ${
-        err ? (typeof err === "string" ? err : JSON.stringify(err)) : ""
-      }`
-    ),
-};
+export default logger;

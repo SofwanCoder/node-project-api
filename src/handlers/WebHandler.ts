@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { sendResponse } from "../shared/utils/responseManager";
-
-import UserController from "../controllers/user.controller";
+import UserController from "../controllers/UserController";
+import { respond } from "../utils/response";
 
 class UserHandler {
   public static async handleSubscribe(
@@ -12,7 +11,7 @@ class UserHandler {
   ) {
     try {
       const response = await UserController.createUserController(req.body);
-      return sendResponse(res, response);
+      respond(res, response);
     } catch (error) {
       next(error);
     }
@@ -26,7 +25,7 @@ class UserHandler {
   ) {
     try {
       const response = await UserController.loginUserController(req.body);
-      return sendResponse(res, response);
+      respond(res, response);
     } catch (error) {
       next(error);
     }
