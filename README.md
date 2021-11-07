@@ -1,6 +1,6 @@
 #Documentation
 
-The WAPLOADED CRYPTO ACADEMY API is the API of [WAPLOADED CRYPTO ACADEMY](https://academy.waploaded.com)
+The PROJECT API is the API of [PROJECT API](https://example.com)
 
 ## Author 🚀
 > [@SofwanCoder](https://github.com/sofwancoder)
@@ -13,6 +13,8 @@ The WAPLOADED CRYPTO ACADEMY API is the API of [WAPLOADED CRYPTO ACADEMY](https:
 - Express
 - Socket.io
 - Jest
+- Mysql
+- NodeCron
 ---
 
 ## Database

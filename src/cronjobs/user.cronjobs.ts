@@ -1,5 +1,5 @@
 import { schedule } from "node-cron";
-import logger from "../lib/logger";
+import logger from "../internal/logger";
 
 function sendGreetings() {
   logger.info("Sending greetings");

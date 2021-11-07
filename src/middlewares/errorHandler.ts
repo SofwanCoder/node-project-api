@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import logger from "../lib/logger";
+import logger from "../internal/logger";
 import HttpException from "../exceptions/http/HttpException";
 import { respond } from "../utils/response";
 

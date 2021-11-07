@@ -1,4 +1,4 @@
-import logger from "../lib/logger";
+import logger from "../internal/logger";
 
 type PromiseFunc = (...args: any[]) => Promise<any | void>;
 

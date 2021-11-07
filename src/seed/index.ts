@@ -1,7 +1,6 @@
-import logger from "../lib/logger";
+import logger from "../internal/logger";
 
-async function seeder() {
-}
+async function seeder() {}
 
 export default async function () {
   try {
