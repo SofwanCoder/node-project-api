@@ -42,3 +42,11 @@ export function success<D>(data: D, message = "completed") {
     message,
   };
 }
+
+export function failure<D>(data: D, message = "Failure") {
+  return {
+    ok: false,
+    data,
+    message,
+  };
+}

@@ -4,9 +4,12 @@ import cors from "./cors";
 import smtp from "./smtp";
 import database from "./database";
 
+const env = process.env.NODE_ENV || "development";
+const port = process.env.PORT || 3000;
+
 export const config = {
-  env: process.env.NODE_ENV || "development",
-  port: process.env.PORT,
+  env,
+  port,
   jwt,
   app,
   smtp,
