@@ -13,7 +13,7 @@ services:
     volumes:
       - mysql_project:/var/lib/mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
 
 volumes:
   mysql_project:
