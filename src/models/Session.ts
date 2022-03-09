@@ -14,47 +14,43 @@ import {
 import { BelongsToGetAssociationMixin } from "sequelize";
 import { User } from "./User";
 
-export interface SessionAttributes {
+export interface ISessionAttributes {
   id: number;
   user_id: number;
-  auth_token: string;
   refresh_token: string;
+  ip_address: string;
+  user_agent: string;
   created_at: Date;
   updated_at: Date;
 }
 
-export type SessionCreationAttributes = Pick<
-  SessionAttributes,
-  "user_id" | "auth_token" | "refresh_token"
+export type ISessionCreationAttributes = Pick<
+  ISessionAttributes,
+  "user_id" | "refresh_token"
 >;
 
 @Table({ tableName: "session" })
 export default class Session extends Model<
-  SessionAttributes,
-  SessionCreationAttributes
+  ISessionAttributes,
+  ISessionCreationAttributes
 > {
   @AutoIncrement
   @PrimaryKey
-  @Column(
-    DataType.INTEGER({
-      unsigned: true,
-    })
-  )
+  @Column
   public id!: number;
 
   @ForeignKey(() => User)
-  @Column(
-    DataType.INTEGER({
-      unsigned: true,
-    })
-  )
+  @Column
   public user_id!: number;
 
-  @Column(DataType.STRING)
-  public auth_token!: string;
-
-  @Column(DataType.STRING)
+  @Column
   public refresh_token!: string;
+
+  @Column
+  public ip_address!: string;
+
+  @Column
+  public user_agent!: string;
 
   @CreatedAt
   @Column(DataType.DATE)
@@ -64,28 +60,16 @@ export default class Session extends Model<
   @Column(DataType.DATE)
   public updated_at!: Date;
 
-  @BelongsTo(() => User, {
-    foreignKey: "user_id",
-    onDelete: "CASCADE",
-  })
+  @BelongsTo(() => User)
   public User!: User;
 
   public getUser!: BelongsToGetAssociationMixin<User>;
 
   public toJSON(): Record<string, unknown> {
-    const {
-      id,
-      user_id,
-      auth_token,
-      refresh_token,
-      created_at,
-      updated_at,
-      User,
-    } = this;
+    const { id, user_id, refresh_token, created_at, updated_at, User } = this;
     return {
       id,
       user_id,
-      auth_token,
       refresh_token,
       created_at,
       updated_at,

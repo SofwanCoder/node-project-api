@@ -1,80 +1,57 @@
 import bcrypt from "bcrypt";
-import Sequelize from "sequelize";
 import {
   AutoIncrement,
   Column,
   CreatedAt,
   DataType,
-  Default,
-  HasOne,
   Model,
   PrimaryKey,
   Table,
-  Unique,
   UpdatedAt,
+  HasMany,
 } from "sequelize-typescript";
-import { Profile, ProfileCreationAttributes } from "./Profile";
-export interface UserAttributes {
+import { Gender } from "../types/enums/base";
+import Session from "./Session";
+
+export interface IUserAttributes {
   id: number;
-  name: string;
-  clearance: number;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  gender: Gender;
+  avatar: string;
   email: string;
-  username: string;
   password: string;
-  is_verified: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface UserCreationAttributes
-  extends Omit<
-    UserAttributes,
-    "id" | "is_verified" | "created_at" | "updated_at" | "is_premium"
-  > {
-  Profile: Omit<ProfileCreationAttributes, "user_id">;
-}
-
-export interface UserDto {
-  id: number;
-  name: string;
-  clearance: number;
-  email: string;
-  username: string;
-  is_verified: boolean;
   created_at: Date;
   updated_at: Date;
-  Profile?: Profile;
 }
 
+export type IUserCreationAttributes = Partial<IUserAttributes>;
+
 @Table({ tableName: "user" })
-export class User extends Model<UserAttributes, UserCreationAttributes> {
+export class User extends Model<IUserAttributes, IUserCreationAttributes> {
   @AutoIncrement
   @PrimaryKey
-  @Column(
-    DataType.INTEGER({
-      unsigned: true,
-    })
-  )
+  @Column
   public id!: number;
 
-  @Default(0)
-  @Column(
-    DataType.SMALLINT({
-      unsigned: true,
-    })
-  )
-  public clearance!: number;
+  @Column
+  public first_name!: string;
 
-  @Column(DataType.STRING)
-  public name!: string;
+  @Column
+  public last_name!: string;
 
-  @Unique
-  @Column(DataType.STRING)
+  @Column
+  public phone!: string;
+
+  @Column
+  public gender!: Gender;
+
+  @Column
+  public avatar!: string;
+
+  @Column
   public email!: string;
-
-  @Unique
-  @Column(DataType.STRING)
-  public username!: string;
 
   @Column(DataType.STRING)
   public get password() {
@@ -84,50 +61,39 @@ export class User extends Model<UserAttributes, UserCreationAttributes> {
     this.setDataValue("password", bcrypt.hashSync(value, 8));
   }
 
-  @Default(false)
-  @Column(DataType.BOOLEAN)
-  public is_verified!: boolean;
-
   @CreatedAt
-  @Default(Sequelize.literal("CURRENT_TIMESTAMP"))
-  @Column(DataType.DATE)
   public created_at!: Date;
 
   @UpdatedAt
-  @Default(Sequelize.literal("CURRENT_TIMESTAMP"))
-  @Column(DataType.DATE)
   public updated_at!: Date;
 
-  @HasOne(() => Profile, {
-    foreignKey: "user_id",
-    sourceKey: "id",
-  })
-  public Profile!: Profile;
-
-  public getProfile!: Sequelize.BelongsToGetAssociationMixin<Profile>;
+  @HasMany(() => Session)
+  public Sessions!: Session[];
 
   public toJSON() {
     const {
       id,
-      clearance,
+      first_name,
+      last_name,
+      phone,
+      gender,
+      avatar,
       email,
-      name,
-      username,
-      is_verified,
+      password,
       created_at,
       updated_at,
-      Profile,
     } = this;
     return {
       id,
-      clearance,
+      first_name,
+      last_name,
+      phone,
+      gender,
+      avatar,
       email,
-      name,
-      username,
-      is_verified,
+      password,
       created_at,
       updated_at,
-      Profile,
     };
   }
 }

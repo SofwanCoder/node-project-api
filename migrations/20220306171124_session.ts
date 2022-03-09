@@ -8,8 +8,7 @@ export async function up(knex: Knex): Promise<void> {
       .unsigned()
       .references("user.id")
       .onDelete("CASCADE");
-    table.string("auth_token").notNullable();
-    table.string("refresh_token").notNullable();
+    table.string("refresh_token").notNullable().index();
     table.string("ip_address").nullable();
     table.string("user_agent").nullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
