@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { verifyToken } from "../helpers/token.helper";
 import config from "../config";
-import { AuthorizedUser } from "../@types/authorization";
+import { AuthorizedUser } from "../types/authorization";
 import logger from "../internal/logger";
 
 export function decryptAuthorization(
