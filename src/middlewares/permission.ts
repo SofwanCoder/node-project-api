@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthorizedUser } from "../@types/authorization";
+import { AuthorizedUser } from "../types/authorization";
 import ForbiddenException from "../exceptions/http/ForbiddenException";
 import UnauthorizedException from "../exceptions/http/UnauthorizedException";
 

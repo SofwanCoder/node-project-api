@@ -19,21 +19,6 @@ export function createUserRules() {
 
         return true;
       }),
-    body("username")
-      .isString()
-      .trim()
-      .toLowerCase()
-      .custom(async (username) => {
-        const exist = await User.findOne({
-          where: {
-            username,
-          },
-        });
-
-        if (exist) throw new Error("Username already in use");
-
-        return true;
-      }),
     body("dob").isDate(),
     body("first_name").isString(),
     body("last_name").isString(),
