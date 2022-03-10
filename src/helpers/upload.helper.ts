@@ -3,8 +3,8 @@ import { writeFileSync } from "fs";
 import { resolve } from "path";
 import { Express } from "express";
 import multer from "multer";
+import slugify from "slugify";
 import config from "../config";
-
 export const storageRoot = resolve("./public");
 export const storageWebsite = `https://${config.app.baseUrl}/public`;
 export const tempStorageLocation = "temp";
@@ -13,7 +13,7 @@ export function generateFileName(file: Express.Multer.File) {
   const { originalname } = file;
 
   const baseHash = crypto.randomBytes(15).toString("hex");
-  const cleanedName = originalname.replace(/ /g, "_");
+  const cleanedName = slugify(originalname);
   return `${baseHash}_${cleanedName}`;
 }
 

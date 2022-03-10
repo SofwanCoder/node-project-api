@@ -1,5 +1,5 @@
-import { config } from "dotenv";
-config();
+import { config as dotEnvConfig } from "dotenv";
+dotEnvConfig();
 import * as bodyParser from "body-parser";
 import compression from "compression";
 import cookieParser from "cookie-parser";
@@ -10,9 +10,13 @@ import methodOverride from "method-override";
 import morgan from "morgan";
 import { routerBase } from "./routes";
 import errorMiddleware from "./middlewares/errorHandler";
+import config from "./config";
 
 export const app = express();
+app.use("/public", express.static(config.dir.public));
+
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(morgan("dev"));
 app.use(cookieParser());
