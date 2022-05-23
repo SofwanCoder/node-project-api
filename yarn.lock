@@ -4722,6 +4722,11 @@ node-fetch@^2.6.0, node-fetch@^2.6.5:
   dependencies:
     whatwg-url "^5.0.0"
 
+node-graceful-shutdown@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/node-graceful-shutdown/-/node-graceful-shutdown-1.1.2.tgz#ca50836fdb95425b832b1e9c455a6634310327fb"
+  integrity sha512-YjIGlKYdieo1gGAtC8lst44sdnUcvHlWgndKVYKDlUyQNHKS8l1oqhxFf83/kEgKNp6GvFvxCoDed2DfMxaAsA==
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
