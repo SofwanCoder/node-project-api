@@ -4,8 +4,8 @@
   "description": "PROJECT API",
   "main": "dist/index.js",
   "engines": {
-    "node": "17.x",
-    "yarn": "1.x"
+    "node": "^16.x",
+    "yarn": "^1.x"
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -113,7 +113,7 @@
     "@types/method-override": "^0.0.32",
     "@types/morgan": "^1.9.3",
     "@types/multer": "^1.4.7",
-    "@types/node": "^17.0.18",
+    "@types/node": "^16.x",
     "@types/node-cron": "^3.0.1",
     "@types/nodemailer": "^6.4.4",
     "@types/sequelize": "^4.28.11",
