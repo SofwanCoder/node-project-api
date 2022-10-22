@@ -94,7 +94,7 @@
     "strong-error-handler": "^4.0.0",
     "supertest": "^6.2.2",
     "swagger-ui-express": "^4.3.0",
-    "tsoa": "^3.14.1",
+    "tsoa": "^4.x",
     "winston": "^3.6.0"
   },
   "devDependencies": {
