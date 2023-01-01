@@ -52,14 +52,9 @@ cinst nodejs
 
 ---
 
-## To install Postgres
+## To install Mysql
 
-For Windows users, you can kindly follow this
-tutorials [here](https://learnsql.com/blog/how-to-install-postgresql-on-windows-in-5-minutes/) to install Postgres on
-your local PC which explains how to create a database
-
-For Mac users, you can kindly follow this tutorials [here](https://www.robinwieruch.de/postgres-sql-macos-setup) to
-install Postgres on your local PC which explains how to create a database
+Go to [https://www.mysql.org](https://www.mysql.org/)
 
 ---
 
@@ -78,7 +73,7 @@ DATABASE_PASSWORD=
 
 ## Start Development
 
-Kindly pull the repo `https://github.com/SofwanCoder/waploaded_crypto_academy_api`
+Use this template `https://github.com/SofwanCoder/node_project_api`
 
 ### Installation
 
@@ -119,6 +114,4 @@ yarn add
 
 ## Development
 
----
 
-## Staging
