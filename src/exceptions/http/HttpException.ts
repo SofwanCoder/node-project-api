@@ -1,9 +1,9 @@
-export class HttpException extends Error {
+export class HttpException<T = any> extends Error{
   public code: number;
   public message: string;
-  public data: string | undefined;
+  public data?: T;
 
-  public constructor(code: number, message: string, data?: string) {
+  public constructor(code: number, message: string, data?: T) {
     super(message);
     this.code = code;
     this.message = message;
