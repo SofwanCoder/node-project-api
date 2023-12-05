@@ -1,72 +1,64 @@
 import {
-  AutoIncrement,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  ForeignKey,
-  Model,
+  Attribute,
   PrimaryKey,
-  Table,
+  AutoIncrement,
+  NotNull,
+  HasMany,
   UpdatedAt,
-} from "sequelize-typescript";
+  Table,
+  CreatedAt,
+  Default,
+  BelongsTo,
+} from "@sequelize/core/decorators-legacy";
+import {
+  Sequelize,
+  DataTypes,
+  Model,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  BelongsToGetAssociationMixin,
+} from "@sequelize/core";
 
-import { BelongsToGetAssociationMixin } from "sequelize";
 import { User } from "./User";
 
-export interface ISessionAttributes {
-  id: number;
-  user_id: number;
-  refresh_token: string;
-  ip_address: string;
-  user_agent: string;
-  created_at: Date;
-  updated_at: Date;
-}
+export type ISessionAttributes = InferAttributes<Session>;
 
-export type ISessionCreationAttributes = Pick<
-  ISessionAttributes,
-  "user_id" | "refresh_token"
->;
+export type ISessionCreationAttributes = InferCreationAttributes<Session>;
 
 @Table({ tableName: "session" })
 export default class Session extends Model<
   ISessionAttributes,
   ISessionCreationAttributes
 > {
-  @AutoIncrement
   @PrimaryKey
-  @Column
-  public id!: number;
+  @Attribute(DataTypes.UUID)
+  public id!: CreationOptional<string>;
 
-  @ForeignKey(() => User)
-  @Column
-  public user_id!: number;
+  @Attribute(DataTypes.STRING)
+  public user_id!: CreationOptional<string>;
 
-  @Column
+  @Attribute(DataTypes.STRING)
   public refresh_token!: string;
 
-  @Column
-  public ip_address!: string;
-
-  @Column
-  public user_agent!: string;
+  @Attribute(DataTypes.STRING)
+  public user_agent!: CreationOptional<string>;
 
   @CreatedAt
-  @Column(DataType.DATE)
-  public created_at!: Date;
+  @Attribute(DataTypes.DATE)
+  public created_at!: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column(DataType.DATE)
-  public updated_at!: Date;
+  @Attribute(DataTypes.DATE)
+  public updated_at!: CreationOptional<Date>;
 
-  @BelongsTo(() => User)
-  public User!: User;
+  @BelongsTo(() => User, "user_id")
+  public user!: CreationOptional<User>;
 
   public getUser!: BelongsToGetAssociationMixin<User>;
 
   public toJSON(): Record<string, unknown> {
-    const { id, user_id, refresh_token, created_at, updated_at, User } = this;
+    const { id, user_id, refresh_token, created_at, updated_at, user } = this;
     return {
       id,
       user_id,

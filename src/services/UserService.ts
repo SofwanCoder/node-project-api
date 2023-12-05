@@ -1,6 +1,6 @@
-import { IUserCreationAttributes, User } from "../models/User";
+import { User } from "../models/User";
 import { generateAuthorization } from "../helpers/auth.helper";
-import { CreateUserPayload } from "../types/user";
+import {CreateUserPayload, IUserCreationAttributes} from "../types/user";
 
 export default class UserService {
   public static async createNewUser(requestBody: CreateUserPayload) {
@@ -10,11 +10,10 @@ export default class UserService {
     const newUser: IUserCreationAttributes = {
       first_name,
       last_name,
-      phone,
-      gender,
       email,
       password,
     };
+
     const user = await User.create(newUser);
 
     const [access_token, refresh_token] = await generateAuthorization(user);

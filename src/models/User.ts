@@ -1,59 +1,47 @@
 import bcrypt from "bcrypt";
 import {
-  AutoIncrement,
-  Column,
-  CreatedAt,
-  DataType,
-  Model,
+  Attribute,
   PrimaryKey,
-  Table,
-  UpdatedAt,
+  AutoIncrement,
+  NotNull,
   HasMany,
-} from "sequelize-typescript";
-import { Gender } from "../types/enums/base";
+  UpdatedAt,
+  Table,
+  CreatedAt,
+  Default,
+} from "@sequelize/core/decorators-legacy";
+import {
+  Sequelize,
+  DataTypes,
+  Model,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from "@sequelize/core";
 import Session from "./Session";
 
-export interface IUserAttributes {
-  id: number;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  gender: Gender;
-  avatar: string;
-  email: string;
-  password: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export type IUserCreationAttributes = Partial<IUserAttributes>;
+export type IUserAttributes = InferAttributes<User>;
+export type IUserCreationAttributes = InferCreationAttributes<User>;
 
 @Table({ tableName: "user" })
 export class User extends Model<IUserAttributes, IUserCreationAttributes> {
   @AutoIncrement
   @PrimaryKey
-  @Column
-  public id!: number;
+  @Attribute(DataTypes.UUID)
+  @Default(() => "hello")
+  public id!: CreationOptional<string>;
 
-  @Column
+  @Attribute(DataTypes.STRING)
   public first_name!: string;
 
-  @Column
+  @Attribute(DataTypes.STRING)
   public last_name!: string;
 
-  @Column
-  public phone!: string;
-
-  @Column
-  public gender!: Gender;
-
-  @Column
-  public avatar!: string;
-
-  @Column
+  @Attribute(DataTypes.STRING)
   public email!: string;
 
-  @Column(DataType.STRING)
+  @Attribute(DataTypes.STRING)
+  @NotNull
   public get password() {
     return this.getDataValue("password");
   }
@@ -62,22 +50,19 @@ export class User extends Model<IUserAttributes, IUserCreationAttributes> {
   }
 
   @CreatedAt
-  public created_at!: Date;
+  public created_at!: CreationOptional<Date>;
 
   @UpdatedAt
-  public updated_at!: Date;
+  public updated_at!: CreationOptional<Date>;
 
-  @HasMany(() => Session)
-  public Sessions!: Session[];
+  // @HasMany(() => Session)
+  // public Sessions!: CreationOptional<Session[]>;
 
   public toJSON() {
     const {
       id,
       first_name,
       last_name,
-      phone,
-      gender,
-      avatar,
       email,
       password,
       created_at,
@@ -87,9 +72,6 @@ export class User extends Model<IUserAttributes, IUserCreationAttributes> {
       id,
       first_name,
       last_name,
-      phone,
-      gender,
-      avatar,
       email,
       password,
       created_at,

@@ -17,6 +17,11 @@ export const config = {
   cors,
   database,
   dir,
+  unleash: {
+    url: process.env.UNLEASH_API_URL || "http://localhost:4242/api",
+    appName: env,
+    instanceId: process.env.UNLEASH_INSTANCE_ID,
+  },
 };
 
 export default config;

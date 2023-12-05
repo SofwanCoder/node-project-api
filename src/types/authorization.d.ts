@@ -1,4 +1,4 @@
-import { TokenType } from "./enums/token";
+import { TokenType } from "../enums/token";
 
 export interface AuthorizedUser {
   id: string | number;

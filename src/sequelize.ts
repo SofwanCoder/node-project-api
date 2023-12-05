@@ -1,14 +1,11 @@
-import { Sequelize, SequelizeOptions } from "sequelize-typescript";
+import { Sequelize, Options, importModels } from "@sequelize/core";
+import config from "./config";
 
-const options: SequelizeOptions = {
+const options: Options = {
   dialect: "mysql",
-  database: process.env.DATABASE_NAME,
   port: 3306,
-  host: process.env.DATABASE_HOST,
-  username: process.env.DATABASE_USERNAME,
-  password: process.env.DATABASE_PASSWORD,
-  models: [__dirname + "/models"],
+  // models: await importModels(__dirname + "/models"),
   logging: false,
 };
 
-export const sequelize = new Sequelize(options);
+export const sequelize = new Sequelize(config.database.uri, options);

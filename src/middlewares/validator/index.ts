@@ -9,7 +9,7 @@ export function validateRules() {
     if (!errors.isEmpty()) {
       const outputErrors: Record<string, any> = {};
       errors.array().forEach((val) => {
-        outputErrors[val.param] = val.msg;
+        outputErrors[val.type] = val.msg;
       });
       const message = "Invalid incomplete/input";
       return respond(res, {

@@ -1,6 +1,3 @@
 export default {
-  name: process.env.DATABASE_NAME,
-  host: process.env.DATABASE_HOST,
-  username: process.env.DATABASE_USERNAME,
-  password: process.env.DATABASE_PASSWORD,
+  uri: process.env.DATABASE_URI ?? "mysql://root:root@localhost:3306/test",
 };
