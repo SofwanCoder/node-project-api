@@ -17,7 +17,9 @@
     "migrate:down": "knex migrate:rollback",
     "dev": "nodemon -x ts-node src/index.ts & nodemon -x npm run doc",
     "build": "npm run clean && npm run doc  && npm run compile",
-    "start": "npm run migrate:up & npm run server"
+    "postbuild": "cp -r src/emails/templates dist/emails/templates",
+    "start:dev": "npm run migrate:up & npm run server",
+    "start:live": "npm run migrate:up -- --knexfile dist/knexfile.js --migrations-directory migrations && npm run server"
   },
   "jest": {
     "moduleFileExtensions": [
