@@ -1,25 +1,27 @@
 import { StatusCodes } from "http-status-codes";
 import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
-import { respond } from "../../utils/response";
+import { respond, vague } from "../../utils/response";
+import Joi from "joi";
 
-export function validateRules() {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const outputErrors: Record<string, any> = {};
-      errors.array().forEach((val) => {
-        outputErrors[val.type] = val.msg;
+export function validateWithJoi<T>(schema: Joi.Schema<T>) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await schema.validateAsync(req.body);
+    } catch (e: unknown) {
+      console.log(e);
+      const error = e as Joi.ValidationError;
+      const errors: Record<string, string> = {};
+      error.details.forEach((err) => {
+        errors[err.context?.key as string] = err.message;
       });
-      const message = "Invalid incomplete/input";
-      return respond(res, {
-        message,
-        errors: outputErrors,
-        code: StatusCodes.EXPECTATION_FAILED,
-      });
+      respond(
+        res,
+        vague(errors, StatusCodes.EXPECTATION_FAILED, "Input validation error"),
+      );
+      return;
     }
-    return next();
+    next();
   };
 }
 
-export default validateRules;
+export default validateWithJoi;

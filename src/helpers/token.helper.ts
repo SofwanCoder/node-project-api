@@ -1,10 +1,10 @@
 import { Base64 } from "js-base64";
-import { SignOptions, sign, verify } from "jsonwebtoken";
+import { type SignOptions, sign, verify } from "jsonwebtoken";
 
 export function generateToken(
   key: string,
-  payload: Record<string, string | number>,
-  options: SignOptions = {}
+  payload: Record<string, unknown>,
+  options: SignOptions = {},
 ) {
   const encryptionKey = Base64.decode(key);
 

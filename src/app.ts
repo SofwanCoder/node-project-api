@@ -1,5 +1,3 @@
-import { config as dotEnvConfig } from "dotenv";
-dotEnvConfig();
 import * as bodyParser from "body-parser";
 import compression from "compression";
 import cookieParser from "cookie-parser";
@@ -16,7 +14,7 @@ export const app = express();
 app.use("/public", express.static(config.dir.public));
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -31,22 +29,24 @@ app.use(
       // fallback to standard filter function
       return compression.filter(req, res);
     },
-  })
+  }),
 );
 
 app.use(
   helmet({
     contentSecurityPolicy: false,
     frameguard: false,
-  })
+  }),
 );
 app.disable("x-powered-by");
 app.use(methodOverride());
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", process.env.ALLOW_ORIGIN);
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Headers", "*");
   res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Expose-Headers", "*");
+
   next();
 });
 

@@ -1,4 +1,4 @@
-export class HttpException<T = any> extends Error{
+export class HttpException<T = unknown> extends Error {
   public code: number;
   public message: string;
   public data?: T;

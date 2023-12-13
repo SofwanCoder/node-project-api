@@ -18,7 +18,7 @@ const logger = winston.createLogger({
     timestamp(),
     printf(({ level, message, label, timestamp }) => {
       return `${timestamp} [${label}] ${level}: ${message}`;
-    })
+    }),
   ),
 });
 

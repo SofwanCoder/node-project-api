@@ -8,11 +8,27 @@ class UserHandler {
     this: void,
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
       const response = await UserController.createUserController(
-        req.body as CreateUserPayload
+        req.body as CreateUserPayload,
+      );
+      respond(res, response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async handleFetchUser(
+    this: void,
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const response = await UserController.fetchUserController(
+        req.params.userId,
       );
       respond(res, response);
     } catch (error) {

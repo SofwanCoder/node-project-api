@@ -1,11 +1,11 @@
-import { TokenType } from "../enums/token";
+import { type TokenType } from "../enums/token";
 
 export interface AuthorizedUser {
-  id: string | number;
-  token: string;
+  id: string;
   clearance: number;
-  type: TokenType.AUTH;
-  session_id: number;
+  type: TokenType;
+  session_id: string;
+  user_id: string;
 }
 
 export interface RefreshedUser {
@@ -21,4 +21,9 @@ export interface CreateTokenPayload {
 
 export interface RefreshTokenPayload {
   refresh_token: string;
+}
+
+export interface DoEmailVerificationPayload {
+  id: string;
+  code: string;
 }

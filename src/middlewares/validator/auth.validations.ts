@@ -1,26 +1,11 @@
-import { body } from "express-validator";
+import joi from "joi";
 
-export function loginUserRules() {
-  return [body("email").isString().isEmail(), body("password").isString()];
-}
+export const AUTH_SESSION_CREATION_SCHEMA = joi.object({
+  email: joi.string().email({ tlds: { allow: false } }),
+  password: joi.string().min(6).required(),
+});
 
-export function refreshTokenRules() {
-  return [body("refresh_token").isString()];
-}
-
-export function resetRules() {
-  return [body("email").isString().isEmail().trim()];
-}
-
-export function secretRules() {
-  return [body("ref").isString(), body("code").isString().isNumeric()];
-}
-
-export function passwordRules() {
-  return [
-    body("password").isString().isLength({
-      min: 6,
-    }),
-    body("token").isString(),
-  ];
-}
+export const AUTH_DO_EMAIL_VERIFICATION_SCHEMA = joi.object({
+  code: joi.string().length(6).required(),
+  id: joi.string().length(26).required(),
+});

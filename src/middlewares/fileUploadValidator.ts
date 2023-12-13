@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { respond } from "../utils/response";
 
@@ -12,15 +12,16 @@ export function fileUploadValidator(key = "file") {
     }
 
     if (er) {
-      return respond(res, {
+      respond(res, {
         message,
-        errors: {
+        data: {
           [key]: er,
         },
         code: StatusCodes.EXPECTATION_FAILED,
       });
+      return;
     }
 
-    return next();
+    next();
   };
 }

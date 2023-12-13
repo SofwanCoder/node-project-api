@@ -1,71 +1,67 @@
 import {
-  AutoIncrement,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  ForeignKey,
-  Model,
+  Attribute,
   PrimaryKey,
-  Table,
   UpdatedAt,
-} from "sequelize-typescript";
+  Table,
+  CreatedAt,
+  Default,
+  BelongsTo,
+} from "@sequelize/core/decorators-legacy";
 
-import { BelongsToGetAssociationMixin } from "sequelize";
+import {
+  DataTypes,
+  Model,
+  type InferAttributes,
+  type InferCreationAttributes,
+  CreationOptional,
+  BelongsToGetAssociationMixin,
+} from "@sequelize/core";
+
 import { User } from "./User";
+import { ulid } from "ulid";
 
-export interface ISecretAttributes {
-  id: number;
-  user_id: number;
-  token: string;
-  created_at: Date;
-  updated_at: Date;
-}
+export type ISecretAttributes = InferAttributes<Secret>;
 
-export type ISecretCreationAttributes = Pick<
-  ISecretAttributes,
-  "user_id" | "token"
->;
+export type ISecretCreationAttributes = InferCreationAttributes<Secret>;
 
 @Table({ tableName: "secret" })
 export default class Secret extends Model<
   ISecretAttributes,
   ISecretCreationAttributes
 > {
-  @AutoIncrement
   @PrimaryKey
-  @Column
-  public id!: number;
+  @Attribute(DataTypes.UUID)
+  @Default(ulid)
+  public id!: CreationOptional<string>;
 
-  @ForeignKey(() => User)
-  @Column
+  @Attribute(DataTypes.UUID)
   public user_id!: number;
 
-  @Column
+  @Attribute(DataTypes.UUID)
   public token!: string;
 
   @CreatedAt
-  @Column(DataType.DATE)
-  public created_at!: Date;
+  @Attribute(DataTypes.DATE)
+  public created_at!: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column(DataType.DATE)
-  public updated_at!: Date;
+  @Attribute(DataTypes.DATE)
+  public updated_at!: CreationOptional<Date>;
 
-  @BelongsTo(() => User)
-  public User!: User;
+  @BelongsTo(() => User, "user_id")
+  public user!: User;
 
   public getUser!: BelongsToGetAssociationMixin<User>;
 
   public toJSON(): Record<string, unknown> {
-    const { id, user_id, token, created_at, updated_at, User } = this;
+    const { id, user_id, token, created_at, updated_at, user } = this;
     return {
       id,
       user_id,
       token,
       created_at,
       updated_at,
-      User,
+      user,
     };
   }
 }

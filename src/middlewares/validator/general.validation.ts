@@ -1,11 +1,6 @@
-import { param, query } from "express-validator";
+import joi from "joi";
 
-export function pagingRules() {
-  return [query(["page", "per_page"]).isNumeric().optional()];
-}
-
-export function pagingParamRules(rules: string[]) {
-  return rules.map((rule) => {
-    return param(rule).isString();
-  });
-}
+export const PAGING_RULES_SCHEMA = joi.object({
+  page: joi.number().optional(),
+  limit: joi.number().optional(),
+});

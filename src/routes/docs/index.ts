@@ -1,13 +1,19 @@
-import express, { Router } from "express";
-import swaggerUi, { JsonObject } from "swagger-ui-express";
+import express, { type Router } from "express";
+import swaggerUi from "swagger-ui-express";
 const router = express.Router();
 
-const docs = require("../../../swagger.json") as JsonObject;
-
-router.use("/view", swaggerUi.serve, swaggerUi.setup(docs));
+router.use(
+  "/view",
+  swaggerUi.serve,
+  swaggerUi.setup(undefined, {
+    swaggerOptions: {
+      url: "/docs/json",
+    },
+  }),
+);
 
 router.get("/json", (req, res) => {
-  return res.send(docs);
+  return res.sendFile("swagger.json", { root: "public/docs" });
 });
 
 export const routerDocs: Router = router;

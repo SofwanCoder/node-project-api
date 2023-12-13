@@ -1,20 +1,21 @@
+import { config as dotEnvConfig } from "dotenv";
+dotEnvConfig();
+
 import { createServer } from "http";
-import { config } from "dotenv";
 import { onShutdown } from "node-graceful-shutdown";
 import { app } from "./app";
 import { sequelize } from "./sequelize";
-import FeatureFlag from "./fflag.ts";
-
-config();
-const port = process.env.PORT || 3000;
+import FeatureFlag from "./fflag";
+import config from "./config";
 
 const server = createServer(app);
 
 void (async () => {
-  await sequelize.authenticate();
+  await sequelize.authenticate({});
   await FeatureFlag.init();
-  // await import("./jobs/index.js");
-  server.listen(port, () => console.info(`Server running on port ${port}`));
+  server.listen(config.port, () => {
+    console.info(`Server running on port ${config.port}`);
+  });
 })();
 
 onShutdown(async () => {

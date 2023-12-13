@@ -6,7 +6,6 @@ import {
   CreatedAt,
   Default,
   BelongsTo,
-  NotNull,
 } from "@sequelize/core/decorators-legacy";
 import {
   DataTypes,
@@ -14,18 +13,19 @@ import {
   type InferAttributes,
   type BelongsToGetAssociationMixin,
 } from "@sequelize/core";
+
 import { User } from "./User";
 import { ulid } from "ulid";
-import { DateTime } from "luxon";
+import { generateRandomNumber, generateRandomString } from "../utils/random";
 
-export type ISessionAttributes = InferAttributes<Session>;
+export type IResetAttributes = InferAttributes<Verifier>;
 
-export type ISessionCreationAttributes = Partial<ISessionAttributes>;
+export type IResetCreationAttributes = Partial<IResetAttributes>;
 
-@Table({ tableName: "session" })
-export default class Session extends Model<
-  ISessionAttributes,
-  ISessionCreationAttributes
+@Table({ tableName: "verifier" })
+export default class Verifier extends Model<
+  IResetAttributes,
+  IResetCreationAttributes
 > {
   @PrimaryKey
   @Attribute(DataTypes.STRING)
@@ -35,14 +35,17 @@ export default class Session extends Model<
   @Attribute(DataTypes.STRING)
   declare user_id: string;
 
-  @Attribute(DataTypes.INTEGER({ unsigned: true }))
-  @Default(0)
-  declare used_count: string;
+  @Attribute(DataTypes.ENUM(["reset", "verify", "auth"]))
+  @Default("verify")
+  declare source: string;
 
-  @Attribute(DataTypes.DATE)
-  @NotNull
-  @Default(() => DateTime.now().plus({ days: 60 }).toJSDate())
-  declare expires_at: Date;
+  @Attribute(DataTypes.STRING)
+  @Default(() => generateRandomNumber(6).toString())
+  declare code: string;
+
+  @Attribute(DataTypes.STRING)
+  @Default(generateRandomString)
+  declare token: string;
 
   @CreatedAt
   @Attribute(DataTypes.DATE)
@@ -58,23 +61,13 @@ export default class Session extends Model<
   declare getUser: BelongsToGetAssociationMixin<User>;
 
   public toJSON() {
-    const {
-      id,
-      user_id,
-      used_count,
-      expires_at,
-      created_at,
-      updated_at,
-      user,
-    } = this;
+    const { id, user_id, source, created_at, updated_at } = this;
     return {
       id,
       user_id,
-      used_count,
-      expires_at,
+      source,
       created_at,
       updated_at,
-      user,
     };
   }
 }

@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { AuthorizedUser } from "../types/authorization";
+import { type NextFunction, type Request, type Response } from "express";
 import ForbiddenException from "../exceptions/http/ForbiddenException";
 import UnauthorizedException from "../exceptions/http/UnauthorizedException";
+import { AuthorizedUser } from "../types/authorization";
 
 export default function requirePermission(clearance = 1) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +10,9 @@ export default function requirePermission(clearance = 1) {
       throw new UnauthorizedException("Unauthorized access");
     }
 
-    // logger.info(JSON.stringify(authorizedUser));
+    if (req.params.userId === "me") {
+      req.params.userId = authorizedUser.user_id;
+    }
 
     if (authorizedUser.clearance < clearance) {
       throw new ForbiddenException("Authorization restricted");
@@ -18,15 +20,13 @@ export default function requirePermission(clearance = 1) {
 
     const requestUser = req.params?.userId;
     if (!requestUser) {
-      return next();
-    }
-
-    if (requestUser === "me") {
-      req.params.userId = String(authorizedUser.id);
+      next();
+      return;
     }
 
     const isCrossAccessRequest =
-      req.params.userId !== String(authorizedUser.id);
+      req.params.userId !== String(authorizedUser.user_id);
+
     const isAdminRequest = authorizedUser.clearance > 3;
 
     if (isCrossAccessRequest && !isAdminRequest) {

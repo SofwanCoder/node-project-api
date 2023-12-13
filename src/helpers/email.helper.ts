@@ -6,6 +6,7 @@ const smtpUser = config.smtp.user || "user";
 const smtpPass = config.smtp.pass || "pass";
 const smtpPort = config.smtp.port || 25;
 const smtpHost = config.smtp.host || "localhost";
+const smtpSecure = false;
 
 const port = Number(smtpPort);
 
@@ -13,7 +14,7 @@ const transporter = createTransport({
   pool: true,
   host: smtpHost,
   port,
-  secure: Number(port) === 465,
+  secure: smtpSecure,
   auth: {
     user: smtpUser,
     pass: smtpPass,
@@ -24,18 +25,18 @@ export async function sendEmailMessage(
   message: string,
   subject: string,
   to: string | string[],
-  replyTo?: string
+  replyTo?: string,
 ) {
   await transporter
     .sendMail({
       to,
       from: {
-        name: "EFINANCE.COM",
-        address: "info@efinancebank.com",
+        name: "Errandboy From Sourcegrid",
+        address: "noreply@sourcegrid.io",
       },
       subject,
       html: message,
-      replyTo: replyTo ? replyTo : undefined,
+      replyTo: replyTo || undefined,
     })
     .catch(logger.error);
 }
@@ -57,9 +58,9 @@ export async function sendMail({
 export async function sendIndividually(
   to: string[],
   subject: string,
-  message: string
+  message: string,
 ) {
-  const promises: Promise<void>[] = [];
+  const promises: Array<Promise<void>> = [];
   to.forEach((to) => {
     promises.push(sendEmailMessage(message, subject, to));
   });

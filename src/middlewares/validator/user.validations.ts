@@ -1,42 +1,22 @@
-import { body } from "express-validator";
+import joi from "joi";
 import { User } from "../../models/User";
 
-export function createUserRules() {
-  return [
-    body("email")
-      .isString()
-      .trim()
-      .isEmail()
-      .toLowerCase()
-      .custom(async (email) => {
-        const exist = await User.findOne({
-          where: {
-            email,
-          },
-        });
-
-        if (exist) throw new Error("Email already in use");
-
-        return true;
-      }),
-    body("dob").isDate(),
-    body("first_name").isString(),
-    body("last_name").isString(),
-    body("country").isString(),
-    body("address").isString(),
-    body("state").isString(),
-    body("phone_number").isString(),
-    body("gender").isIn(["Male", "Female"]),
-    body("password").isString().isLength({ min: 6 }),
-    body("password_confirm")
-      .isString()
-      .isLength({ min: 6 })
-      .custom((input, meta) => {
-        const password = meta.req.body.password;
-        if (input !== password) {
-          throw new Error("Does not match password");
+export const USER_CREATION_SCHEMA = joi
+  .object({
+    firstname: joi.string().required(),
+    lastname: joi.string().required(),
+    email: joi
+      .string()
+      .email({ tlds: { allow: false } })
+      .external(async (value, helpers) => {
+        const user = await User.findOne({ where: { email: value } });
+        if (user) {
+          return helpers.message({ external: "Email already exist" });
         }
-        return true;
-      }),
-  ];
-}
+        return value;
+      })
+      .required(),
+    password: joi.string().min(6).required(),
+    password_confirmation: joi.string().valid(joi.ref("password")).optional(),
+  })
+  .unknown();

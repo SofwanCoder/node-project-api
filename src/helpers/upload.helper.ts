@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
-import { Express } from "express";
+import { type Express } from "express";
 import multer from "multer";
 import slugify from "slugify";
 import config from "../config";
@@ -22,7 +22,7 @@ export default function temporaryStorage(file: Express.Multer.File) {
 
   const { publicUrl } = saveToStorage(
     file,
-    `${tempStorageLocation}/${uniqueName}`
+    `${tempStorageLocation}/${uniqueName}`,
   );
 
   return publicUrl;

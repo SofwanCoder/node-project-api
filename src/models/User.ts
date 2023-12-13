@@ -2,78 +2,109 @@ import bcrypt from "bcrypt";
 import {
   Attribute,
   PrimaryKey,
-  AutoIncrement,
   NotNull,
-  HasMany,
   UpdatedAt,
   Table,
   CreatedAt,
   Default,
+  HasMany,
+  AllowNull,
 } from "@sequelize/core/decorators-legacy";
 import {
-  Sequelize,
   DataTypes,
   Model,
-  InferAttributes,
-  InferCreationAttributes,
-  CreationOptional,
+  type InferAttributes,
+  type HasManyCreateAssociationMixin,
+  type HasManyGetAssociationsMixin,
+  HasManyRemoveAssociationsMixin,
 } from "@sequelize/core";
 import Session from "./Session";
+import { ulid } from "ulid";
+import Verifier from "./Verifier";
 
 export type IUserAttributes = InferAttributes<User>;
-export type IUserCreationAttributes = InferCreationAttributes<User>;
+export type IUserCreationAttributes = Partial<IUserAttributes>;
 
 @Table({ tableName: "user" })
 export class User extends Model<IUserAttributes, IUserCreationAttributes> {
-  @AutoIncrement
   @PrimaryKey
-  @Attribute(DataTypes.UUID)
-  @Default(() => "hello")
-  public id!: CreationOptional<string>;
+  @Attribute(DataTypes.STRING)
+  @Default(ulid)
+  declare id: string;
 
   @Attribute(DataTypes.STRING)
-  public first_name!: string;
+  declare firstname: string;
 
   @Attribute(DataTypes.STRING)
-  public last_name!: string;
+  declare lastname: string;
 
   @Attribute(DataTypes.STRING)
-  public email!: string;
+  @AllowNull
+  declare phone: string;
+
+  @Attribute(DataTypes.STRING)
+  declare email: string;
+
+  @Attribute(DataTypes.BOOLEAN)
+  @Default(false)
+  declare is_verified: boolean;
+
+  @Attribute(DataTypes.BOOLEAN)
+  @Default(false)
+  declare is_2fa_enabled: boolean;
 
   @Attribute(DataTypes.STRING)
   @NotNull
   public get password() {
     return this.getDataValue("password");
   }
+
   public set password(value: string) {
     this.setDataValue("password", bcrypt.hashSync(value, 8));
   }
 
   @CreatedAt
-  public created_at!: CreationOptional<Date>;
+  @Attribute(DataTypes.DATE)
+  declare created_at: Date;
 
   @UpdatedAt
-  public updated_at!: CreationOptional<Date>;
+  @Attribute(DataTypes.DATE)
+  declare updated_at: Date;
 
-  // @HasMany(() => Session)
-  // public Sessions!: CreationOptional<Session[]>;
+  @HasMany(() => Session, "user_id")
+  declare sessions: Session[];
+
+  @HasMany(() => Verifier, "user_id")
+  declare verifier: Verifier[];
+
+  declare createSession: HasManyCreateAssociationMixin<Session>;
+  declare createVerifier: HasManyCreateAssociationMixin<Verifier>;
+  declare getVerifiers: HasManyGetAssociationsMixin<Verifier>;
+  declare removeVerifiers: HasManyRemoveAssociationsMixin<
+    Verifier,
+    Verifier["id"]
+  >;
 
   public toJSON() {
     const {
       id,
-      first_name,
-      last_name,
+      firstname,
+      lastname,
       email,
-      password,
+      phone,
+      is_verified,
+      is_2fa_enabled,
       created_at,
       updated_at,
     } = this;
     return {
       id,
-      first_name,
-      last_name,
+      firstname,
+      lastname,
+      phone,
       email,
-      password,
+      is_verified,
+      is_2fa_enabled,
       created_at,
       updated_at,
     };

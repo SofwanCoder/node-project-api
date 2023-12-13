@@ -23,25 +23,27 @@
     "strict": true,
 
     /* Enable all strict type-checking options. */
-     "noImplicitAny": true,
+    "noImplicitAny": true,
 
     /* Additional Checks */
-     "noImplicitReturns": true,
+    "noImplicitReturns": true,
 
     /* Module Resolution Options */
-     "moduleResolution": "nodenext",
-     "baseUrl": "./",
-     "esModuleInterop": true,
+    "moduleResolution": "nodenext",
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "paths": {},
 
     /* Experimental Options */
-     "experimentalDecorators": true,
-     "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
     /* Advanced Options */
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "allowImportingTsExtensions": true
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

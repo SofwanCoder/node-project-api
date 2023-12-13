@@ -1,3 +1,3 @@
 export default {
-  allowOrigin: process.env.ALLOW_ORIGIN
+  allowOrigin: process.env.ALLOW_ORIGIN,
 };
