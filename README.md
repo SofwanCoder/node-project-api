@@ -63,10 +63,7 @@ Go to [https://www.mysql.org](https://www.mysql.org/)
 To setup your database for the project, after creation kindly open the .env file and update as necessary
 
 ```markdown
-DATABASE_NAME=
-DATABASE_HOST=
-DATABASE_USERNAME=
-DATABASE_PASSWORD=
+DATABASE_URI = mysql://root:password@localhost:3306/database_name
 ```
 
 ## Kindly replace these values with the appropriate values based on your Database environment
